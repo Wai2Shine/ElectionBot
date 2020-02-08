@@ -4,12 +4,22 @@
   "description": "Discord bot to create election that grant the winners specified permission",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js | bunyan",
+    "test": "jest && standard",
+    "lint": "standard --fix"
   },
   "keywords": [
     "discord",
     "bot"
   ],
   "author": "shine2lay",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  },
+  "devDependencies": {
+    "bunyan": "^1.8.12",
+    "jest": "^25.1.0",
+    "standard": "^14.3.1"
+  }
 }

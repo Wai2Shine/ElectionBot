@@ -4,7 +4,7 @@
   "description": "Discord bot to create election that grant the winners specified permission",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js | bunyan",
+    "start": "nodemon index.js | bunyan",
     "test": "jest && standard",
     "lint": "standard --fix"
   },
@@ -15,11 +15,12 @@
   "author": "shine2lay",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "discord.js": "github:discordjs/discord.js"
   },
   "devDependencies": {
     "bunyan": "^1.8.12",
     "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
     "standard": "^14.3.1"
   }
 }

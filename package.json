@@ -1,0 +1,15 @@
+{
+  "name": "electionbot",
+  "version": "1.0.0",
+  "description": "Discord bot to create election that grant the winners specified permission",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "shine2lay",
+  "license": "ISC"
+}

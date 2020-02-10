@@ -15,7 +15,8 @@
   "author": "shine2lay",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js"
+    "discord.js": "github:discordjs/discord.js",
+    "mongoose": "^5.8.11"
   },
   "devDependencies": {
     "bunyan": "^1.8.12",

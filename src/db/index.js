@@ -1,10 +1,10 @@
-require('dotenv').config
+require('dotenv').config()
 const bunyan = require('bunyan')
 const mongoose = require('mongoose')
 const MONGO_DB_URL = process.env.MONGO_URL || 'mongodb://localhost:27018/election-bot'
-const campaignSchema = require('./models/campaign')
+const CampaignSchema = require('./models/campaign')
 
-mongoose.connect('mongodb://localhost:27018/election-bot', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 
 mongoose.connection.on('error', err => {
   log.fatal('Error connecting to DB :' + err)
@@ -17,12 +17,12 @@ mongoose.connection.once('connected', () => log.info('Database connection succes
 const log = bunyan.createLogger({ name: 'ElectionBot/db' })
 
 async function fetchLatestCampaign () {
-  const allCampaign = await campaignSchema.find().sort({ createdAt: -1 }).exec()
+  const allCampaign = await CampaignSchema.find().sort({ createdAt: -1 }).exec()
   return allCampaign[0]
 }
 
 async function createCampaign (campaign) {
-  const campaignToInsert = new campaignSchema(campaign)
+  const campaignToInsert = new CampaignSchema(campaign)
 
   // save model to database
   await campaignToInsert.save()

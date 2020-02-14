@@ -18,7 +18,7 @@ client.on('message', async msg => {
       // fetch the current campaign
       const latestCampaign = await campaign.getCurrentCampaign()
       log.info(latestCampaign.isActive)
-      if(R.isNil(latestCampaign) || !latestCampaign.isActive) {
+      if (R.isNil(latestCampaign) || !latestCampaign.isActive) {
         return msg.channel.send('There are no current campaign! please create one!')
       }
 

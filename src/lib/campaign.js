@@ -11,5 +11,5 @@ module.exports = {
   getCurrentCampaign: async () => {
     const latestCampaign = await db.fetchLatestCampaign()
     return latestCampaign
-  },
+  }
 }

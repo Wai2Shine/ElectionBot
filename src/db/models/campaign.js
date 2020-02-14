@@ -13,7 +13,7 @@ const campaignSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now() }
 })
 
-campaignSchema.virtual('isActive').get(function() {
+campaignSchema.virtual('isActive').get(function () {
   return Date.now() <= this.votingPeriod
 })
 

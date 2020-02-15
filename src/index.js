@@ -57,4 +57,4 @@ client.on('message', async msg => {
   }
 })
 
-client.login('Njc1ODI4Mzg4ODI0NjEyODg1.XkFLjg.VOMRBIQNxh6Vv7CnGwnFKuMcNkU')
+client.login(process.env.DISCORD_BOT_TOKEN)

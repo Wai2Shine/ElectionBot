@@ -3,14 +3,19 @@ const nominee = require('./nominee')
 
 const campaignSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  roleTitle: { type: String, required: true },
+  guildID: { type: String, required: true },
+  creator: { type: String, required: true},
+  targetRole: { type: String, required: true },
   openRoleCount: { type: Number, required: true },
   nominationSlot: Number,
   nominationPeriod: { type: Date, required: true },
   votingPeriod: { type: Date, required: true },
   nominees: { type: Map, of: nominee },
   createdAt: { type: Date, required: true },
-  updatedAt: { type: Date, default: Date.now() }
+  updatedAt: { type: Date, default: Date.now() },
+  nominated: [{type: String}],
+  voted: [{type: String}],
+  hasRoleTransferCompleted: { type: Boolean, default: false }
 })
 
 campaignSchema.virtual('isActive').get(function () {

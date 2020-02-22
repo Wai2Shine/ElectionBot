@@ -4,12 +4,12 @@ const bunyan = require('bunyan')
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
 
-const commandFiles = fs.readdirSync('src/commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('src/commands').filter(file => file.endsWith('.js'))
 
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
+  const command = require(`./commands/${file}`)
 
-  client.commands.set(command.name, command);
+  client.commands.set(command.name, command)
 }
 
 const log = bunyan.createLogger({ name: 'ElectionBot/main' })
@@ -28,19 +28,19 @@ client.on('message', async msg => {
 
   if (commandName === 'stats') return msg.channel.send(client.guilds.size)
 
-  if (!client.commands.has(commandName)) return;
+  if (!client.commands.has(commandName)) return
 
   const command = client.commands.get(commandName)
 
   if (command.guildOnly && msg.channel.type !== 'text') {
-    return msg.reply('I can\'t execute that command inside DMs!');
+    return msg.reply('I can\'t execute that command inside DMs!')
   }
 
   try {
-    command.execute(msg, args);
+    command.execute(msg, args)
   } catch (error) {
-    log.error(error);
-    message.reply('there was an error trying to execute that command!');
+    log.error(error)
+    msg.reply('there was an error trying to execute that command!')
   }
 })
 

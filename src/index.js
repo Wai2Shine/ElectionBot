@@ -1,59 +1,46 @@
+const fs = require('fs')
 const Discord = require('discord.js')
 const bunyan = require('bunyan')
-const R = require('ramda')
-const campaign = require('./lib/campaign')
 const client = new Discord.Client()
+client.commands = new Discord.Collection()
+
+const commandFiles = fs.readdirSync('src/commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+  const command = require(`./commands/${file}`);
+
+  client.commands.set(command.name, command);
+}
 
 const log = bunyan.createLogger({ name: 'ElectionBot/main' })
+
+const COMMAND_PREFIX = '!election '
 
 client.on('ready', () => {
   log.info(`Logged in as ${client.user.tag}!`)
 })
 
 client.on('message', async msg => {
-  if (msg.content.startsWith('!election_campaign ')) {
-    const params = msg.content.split(' ')
+  if (!msg.content.startsWith(COMMAND_PREFIX) || msg.author.bot) return
 
-    if (params[1] === 'status' || params[1] === 'current') {
-      // fetch the current campaign
-      const latestCampaign = await campaign.getCurrentCampaign()
-      log.info(latestCampaign.isActive)
-      if (R.isNil(latestCampaign) || !latestCampaign.isActive) {
-        return msg.channel.send('There are no current campaign! please create one!')
-      }
+  const args = msg.content.slice(COMMAND_PREFIX.length).split(/ +/)
+  const commandName = args.shift().toLowerCase()
 
-      return msg.channel.send(latestCampaign.toString())
-    } else if (params[1] === 'create') {
-      // validate params
-      const name = params[2]
-      const roleTitle = params[3]
-      const openRoleCount = params[4]
-      const nominationSlot = params[5]
-      const nominationPeriod = new Date(params[6])
-      const votingPeriod = new Date(params[7])
-      await campaign.createCampaign({
-        name,
-        roleTitle,
-        openRoleCount,
-        nominationSlot,
-        nominationPeriod,
-        votingPeriod
-      })
+  if (commandName === 'stats') return msg.channel.send(client.guilds.size)
 
-      return msg.channel.send('create campaign call received')
-    }
+  if (!client.commands.has(commandName)) return;
 
-    await msg.channel.send('pong')
+  const command = client.commands.get(commandName)
+
+  if (command.guildOnly && msg.channel.type !== 'text') {
+    return msg.reply('I can\'t execute that command inside DMs!');
   }
 
-  if (msg.content.startsWith('!election_nominate ')) {
-    // fetch the current campaign
-
-    // check if sender can
-  }
-
-  if (msg.content.startsWith('!election_vote ')) {
-    await msg.channel.send('pong')
+  try {
+    command.execute(msg, args);
+  } catch (error) {
+    log.error(error);
+    message.reply('there was an error trying to execute that command!');
   }
 })
 

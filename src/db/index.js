@@ -16,8 +16,8 @@ mongoose.connection.once('connected', () => log.info('Database connection succes
 
 const log = bunyan.createLogger({ name: 'ElectionBot/db' })
 
-async function fetchLatestCampaign () {
-  const allCampaign = await CampaignSchema.find({}).sort({ createdAt: -1 }).exec()
+async function fetchLatestCampaignByGuildId (guildID) {
+  const allCampaign = await CampaignSchema.find({ guildID }).sort({ createdAt: -1 }).exec()
   return allCampaign[0]
 }
 
@@ -33,7 +33,7 @@ async function cancelCampaign (campaignId) {
 }
 
 module.exports = {
-  fetchLatestCampaign,
+  fetchLatestCampaignByGuildId,
   createCampaign,
   cancelCampaign
 }

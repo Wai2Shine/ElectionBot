@@ -28,8 +28,7 @@ campaignSchema.virtual('currentPhase').get(function () {
     return 'Nomination Phase'
   } else if (Date.now() <= this.votingPeriod) {
     return 'Voting Phase'
-  } else
-  return 'Campaign Over'
+  } else { return 'Campaign Over' }
 })
 
 module.exports = mongoose.model('campaign', campaignSchema)

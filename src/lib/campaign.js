@@ -1,8 +1,8 @@
 const db = require('../db')
 
 const nominees = []
-nominees.push({ username: 'shine2lay', nominators: ['waiDumbass', 'wie']})
-nominees.push({ username: 'keelee', nominators: ['waiDumbass', 'wss', 'wie']})
+nominees.push({ username: 'shine2lay', nominators: ['waiDumbass', 'wie'] })
+nominees.push({ username: 'keelee', nominators: ['waiDumbass', 'wss', 'wie'] })
 
 module.exports = {
   createCampaign: async (campaign) => {

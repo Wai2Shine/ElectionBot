@@ -29,11 +29,11 @@ function craftStatusMessage (campaign) {
 
   if (currentPhase === 'Nomination Phase') {
     phaseEnd = campaign.nominationPeriod
-    sortedNominees = campaign.nominees.sort((a,b) => b.nominators.length - a.nominators.length)
+    sortedNominees = campaign.nominees.sort((a, b) => b.nominators.length - a.nominators.length)
     nominees = sortedNominees.map(nominee => `${nominee.username}\t ${nominee.nominators.length}`)
   } else {
     phaseEnd = campaign.nominationPeriod
-    sortedNominees = campaign.nominees.sort((a,b) => b.voters.length - a.voters.length)
+    sortedNominees = campaign.nominees.sort((a, b) => b.voters.length - a.voters.length)
     nominees = sortedNominees.map(nominee => `${nominee.username}\t ${nominee.voters.length}`)
   }
 

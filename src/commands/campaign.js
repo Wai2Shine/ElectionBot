@@ -11,7 +11,7 @@ async function validateParameters (msg, campaign) {
     errors.push('Number of Nominee Slots can\'t be lower than number of Open Roles')
   }
 
-  if (!msg.guild.roles.find(role => role.name === campaign.name)) {
+  if (!msg.guild.roles.find(role => role.name === campaign.targetRole)) {
     errors.push('Role title provided is not valid')
   }
 
@@ -42,7 +42,7 @@ module.exports = {
     } else if (args[0] === 'create') {
       const latestCampaign = await Campaign.getCurrentCampaign()
 
-      if (R.isNil(latestCampaign) && latestCampaign.isActive) {
+      if (!R.isNil(latestCampaign) && latestCampaign.isActive) {
         return msg.reply.send('There is an existing campaign on going please use !election campaign status to get info on current campaign')
       }
 
@@ -68,6 +68,15 @@ module.exports = {
       await Campaign.createCampaign(campaignToCreate)
 
       return msg.channel.send('create campaign successful')
+    } else if (args[0] === 'cancel') {
+      const latestCampaign = await Campaign.getCurrentCampaign()
+
+      if (R.isNil(latestCampaign) || !latestCampaign.isActive) {
+        return msg.channel.send('There are no current campaign! please create one!')
+      }
+
+      await Campaign.cancelCurrentCampaign(latestCampaign.id)
+      return msg.channel.send('Cancellation of current campaign was successful')
     }
   }
 }

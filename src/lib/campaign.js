@@ -9,7 +9,9 @@ module.exports = {
         { createdAt: Date.now(), updatedAt: Date.now() }))
   },
   getCurrentCampaign: async () => {
-    const latestCampaign = await db.fetchLatestCampaign()
-    return latestCampaign
+    return db.fetchLatestCampaign()
+  },
+  cancelCurrentCampaign: async (id) => {
+    return db.cancelCampaign(id)
   }
 }

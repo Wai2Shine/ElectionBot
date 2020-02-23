@@ -17,7 +17,7 @@ mongoose.connection.once('connected', () => log.info('Database connection succes
 const log = bunyan.createLogger({ name: 'ElectionBot/db' })
 
 async function fetchLatestCampaign () {
-  const allCampaign = await CampaignSchema.find().sort({ createdAt: -1 }).exec()
+  const allCampaign = await CampaignSchema.find({}).sort({ createdAt: -1 }).exec()
   return allCampaign[0]
 }
 
@@ -25,10 +25,15 @@ async function createCampaign (campaign) {
   const campaignToInsert = new CampaignSchema(campaign)
 
   // save model to database
-  await campaignToInsert.save()
+  return campaignToInsert.save()
+}
+
+async function cancelCampaign (campaignId) {
+  return CampaignSchema.updateOne({ _id: campaignId }, { isCancelled: true })
 }
 
 module.exports = {
   fetchLatestCampaign,
-  createCampaign
+  createCampaign,
+  cancelCampaign
 }

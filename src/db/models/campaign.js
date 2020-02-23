@@ -15,11 +15,12 @@ const campaignSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now() },
   nominated: [{ type: String }],
   voted: [{ type: String }],
-  hasRoleTransferCompleted: { type: Boolean, default: false }
+  hasRoleTransferCompleted: { type: Boolean, default: false },
+  isCancelled: { type: Boolean, default: false}
 })
 
 campaignSchema.virtual('isActive').get(function () {
-  return Date.now() <= this.votingPeriod
+  return Date.now() <= this.votingPeriod && !this.isCancelled
 })
 
 module.exports = mongoose.model('campaign', campaignSchema)

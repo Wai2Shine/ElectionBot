@@ -16,7 +16,7 @@ const campaignSchema = new mongoose.Schema({
   nominated: [{ type: String }],
   voted: [{ type: String }],
   hasRoleTransferCompleted: { type: Boolean, default: false },
-  isCancelled: { type: Boolean, default: false}
+  isCancelled: { type: Boolean, default: false }
 })
 
 campaignSchema.virtual('isActive').get(function () {

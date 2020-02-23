@@ -1,5 +1,4 @@
-const bunyan = require('bunyan')
-const log = bunyan.createLogger({ name: 'Electionbot/command/help' })
+const log = require('../lib/campaign')
 
 module.exports = {
   name: 'help',

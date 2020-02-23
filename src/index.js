@@ -1,6 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-const bunyan = require('bunyan')
+const log = require('./lib/utils/logger')
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
 
@@ -11,8 +11,6 @@ for (const file of commandFiles) {
 
   client.commands.set(command.name, command)
 }
-
-const log = bunyan.createLogger({ name: 'ElectionBot/main' })
 
 const COMMAND_PREFIX = '!election '
 

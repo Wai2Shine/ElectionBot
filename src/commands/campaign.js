@@ -1,8 +1,7 @@
-const Campaign = require('../lib/campaign')
 const R = require('ramda')
-const bunyan = require('bunyan')
 const moment = require('moment')
-const log = bunyan.createLogger({ name: 'Electionbot/command/campaign' })
+const log = require('../lib/utils/logger')
+const Campaign = require('../lib/campaign')
 
 async function validateParameters (msg, campaign) {
   const errors = []

@@ -23,63 +23,42 @@ async function validateParameters (msg, campaign) {
 }
 
 function craftStatusMessage (campaign) {
+  const currentPhase = campaign.currentPhase
+
+  let sortedNominees, nominees, phaseEnd
+
+  if (currentPhase === 'Nomination Phase') {
+    phaseEnd = campaign.nominationPeriod
+    sortedNominees = campaign.nominees.sort((a, b) => b.nominators.length - a.nominators.length)
+    nominees = sortedNominees.map(nominee => `${nominee.username}\t ${nominee.nominators.length}`)
+  } else {
+    phaseEnd = campaign.nominationPeriod
+    sortedNominees = campaign.nominees.sort((a, b) => b.voters.length - a.voters.length)
+    nominees = sortedNominees.map(nominee => `${nominee.username}\t ${nominee.voters.length}`)
+  }
+
   return {
     color: 0x0099ff,
     title: 'Current Campaign',
     author: {
       name: 'Election Bot'
-      // icon_url: 'https://i.imgur.com/wSTFkRM.png',
-      // url: 'https://discord.js.org'
     },
-    description: 'Hold election to give community member permission over the server',
-    thumbnail: {
-      // url: 'https://i.imgur.com/wSTFkRM.png'
-    },
+    description: `Currently in : ${currentPhase} \n This Phase will end ${moment(phaseEnd).fromNow()}`,
     fields: [
       {
-        name: '\u200b',
-        value: '\u200b'
+        name: 'Parameters of current campaign',
+        value: `Role to confer : ${campaign.targetRole}
+        Number of open role: ${campaign.openRoleCount}
+        Number of nominee slot: ${campaign.nominationSlot}
+        Nomination Period will end at : ${moment(campaign.nominationPeriod)}
+        Voting Period will end at : ${moment(campaign.votingPeriod)}
+        Campaign Created by ${campaign.creator}`
       },
       {
-        name: 'How this works',
-        value: 'Before a campaign is created, an admin to create a role to which the community member will be voting for' +
-          'Then an admin will create a campaign which will trigger the nomination phase. \n During nomination phase, the community' +
-          'members can each nominate one person for the role. After the nomination period ends, the top # of nominee will be eligible to be voted' +
-          'into the role when the voting period starts'
-      },
-      {
-        name: 'Usage Guide',
-        value: `!election help : bring up this very helpful information panel 
-            
-            !election campaign : Create/Cancel a campaign or see the status of current campaign       
-            
-            !election nominate : Nominate a fellow member for the role during the nomination Period
-            
-            !election vote : Vote for the one of the possible nominee during the Voting Phase`
-      },
-      {
-        name: '\u200b',
-        value: '\u200b'
-      },
-      {
-        name: 'Inline field title',
-        value: 'Some value here',
-        inline: true
-      },
-      {
-        name: 'Inline field title',
-        value: 'Some value here',
-        inline: true
-      },
-      {
-        name: 'Inline field title',
-        value: 'Some value here',
-        inline: true
+        name: 'Nominees and vote count',
+        value: `${nominees.join('\n')}`
       }
     ],
-    image: {
-      url: 'https://i.imgur.com/wSTFkRM.png'
-    },
     timestamp: new Date(),
     footer: {
       text: 'Some footer text here',
@@ -98,7 +77,7 @@ module.exports = {
     msg.channel.send('campaign call received')
     if (args[0] === 'status' || args[1] === 'current') {
       // fetch the current campaign
-      const latestCampaign = await Campaign.getCurrentCampaign()
+      const latestCampaign = await Campaign.getCurrentCampaign(msg.guild.id)
 
       if (R.isNil(latestCampaign) || !latestCampaign.isActive) {
         return msg.channel.send('There are no current campaign! please create one!')
@@ -106,10 +85,10 @@ module.exports = {
 
       return msg.channel.send({ embed: craftStatusMessage(latestCampaign) })
     } else if (args[0] === 'create') {
-      const latestCampaign = await Campaign.getCurrentCampaign()
+      const latestCampaign = await Campaign.getCurrentCampaign(msg.guild.id)
 
       if (!R.isNil(latestCampaign) && latestCampaign.isActive) {
-        return msg.reply.send('There is an existing campaign on going please use !election campaign status to get info on current campaign')
+        return msg.reply('There is an existing campaign on going please use !election campaign status to get info on current campaign')
       }
 
       if (args.length !== 7) msg.reply('Wrong format provided. please refer to !election help for general info and usage patterns')
@@ -135,7 +114,7 @@ module.exports = {
 
       return msg.channel.send('create campaign successful')
     } else if (args[0] === 'cancel') {
-      const latestCampaign = await Campaign.getCurrentCampaign()
+      const latestCampaign = await Campaign.getCurrentCampaign(msg.guild.id)
 
       if (R.isNil(latestCampaign) || !latestCampaign.isActive) {
         return msg.channel.send('There are no current campaign! please create one!')

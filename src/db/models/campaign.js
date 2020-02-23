@@ -10,7 +10,7 @@ const campaignSchema = new mongoose.Schema({
   nominationSlot: Number,
   nominationPeriod: { type: Date, required: true },
   votingPeriod: { type: Date, required: true },
-  nominees: { type: Map, of: nominee },
+  nominees: { type: Array, of: nominee },
   createdAt: { type: Date, required: true },
   updatedAt: { type: Date, default: Date.now() },
   nominated: [{ type: String }],
@@ -21,6 +21,14 @@ const campaignSchema = new mongoose.Schema({
 
 campaignSchema.virtual('isActive').get(function () {
   return Date.now() <= this.votingPeriod && !this.isCancelled
+})
+
+campaignSchema.virtual('currentPhase').get(function () {
+  if (Date.now() <= this.nominationPeriod) {
+    return 'Nomination Phase'
+  } else if (Date.now() <= this.votingPeriod) {
+    return 'Voting Phase'
+  } else { return 'Campaign Over' }
 })
 
 module.exports = mongoose.model('campaign', campaignSchema)

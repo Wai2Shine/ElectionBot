@@ -1,8 +1,7 @@
-const Campaign = require('../lib/campaign')
 const R = require('ramda')
-const bunyan = require('bunyan')
 const moment = require('moment')
-const log = bunyan.createLogger({ name: 'Electionbot/command/campaign' })
+const log = require('../lib/utils/logger')
+const Campaign = require('../lib/campaign')
 
 async function validateParameters (msg, campaign) {
   const errors = []
@@ -32,7 +31,7 @@ function craftStatusMessage (campaign) {
     sortedNominees = campaign.nominees.sort((a, b) => b.nominators.length - a.nominators.length)
     nominees = sortedNominees.map(nominee => `${nominee.username}\t ${nominee.nominators.length}`)
   } else {
-    phaseEnd = campaign.nominationPeriod
+    phaseEnd = campaign.votingPeriod
     sortedNominees = campaign.nominees.sort((a, b) => b.voters.length - a.voters.length)
     nominees = sortedNominees.map(nominee => `${nominee.username}\t ${nominee.voters.length}`)
   }
@@ -91,7 +90,7 @@ module.exports = {
         return msg.reply('There is an existing campaign on going please use !election campaign status to get info on current campaign')
       }
 
-      if (args.length !== 7) msg.reply('Wrong format provided. please refer to !election help for general info and usage patterns')
+      if (args.length !== 7) return msg.reply('Wrong format provided. please refer to "!election help" for general info and usage patterns')
 
       const campaignToCreate = {
         name: args[1],

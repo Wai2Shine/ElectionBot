@@ -121,6 +121,8 @@ module.exports = {
 
       await Campaign.cancelCurrentCampaign(latestCampaign.id)
       return msg.channel.send('Cancellation of current campaign was successful')
+    } else {
+      return msg.reply('Unknown Sub Command provided, please use "!election help" to see usage guide')
     }
   }
 }

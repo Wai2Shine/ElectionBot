@@ -5,9 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "nodemon src/index.js",
-    "test": "LOG_LEVEL=warn NODE_ENV=test jest __tests__/commands/campaign.test.js && standard",
+    "test": "LOG_LEVEL=warn NODE_ENV=test jest __tests__/lib/campaign.test.js && standard",
     "lint": "standard --fix",
-    "test-coverage": "standard && jest --collectCoverage"
+    "test:coverage": "LOG_LEVEL=warn jest --collectCoverage && standard"
   },
   "keywords": [
     "discord",

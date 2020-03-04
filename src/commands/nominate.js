@@ -1,9 +1,8 @@
 const R = require('ramda')
-const moment = require('moment')
 const log = require('../lib/utils/logger')
 const Campaign = require('../lib/campaign')
 
-function checkCampaignStatus(campaign) {
+function checkCampaignStatus (campaign) {
   if (R.isNil(campaign) || !campaign.isActive) {
     return 'There are no current campaign! please create one!'
   }
@@ -24,8 +23,8 @@ module.exports = {
 
     const nomineeToNominate = msg.guild.members.find(member => member.user.username === args[0])
 
-    if(R.isNil(nomineeToNominate)) return msg.reply('We were not able to find a user with this username')
-    if(nomineeToNominate.user.bot) return msg.reply('You can not nominate a BOT')
+    if (R.isNil(nomineeToNominate)) return msg.reply('We were not able to find a user with this username')
+    if (nomineeToNominate.user.bot) return msg.reply('You can not nominate a BOT')
 
     const currentCampaign = await Campaign.getCurrentCampaign(msg.guild.id)
     const campaignStatusError = checkCampaignStatus(currentCampaign)

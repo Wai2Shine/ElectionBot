@@ -1,9 +1,8 @@
 const R = require('ramda')
-const moment = require('moment')
 const log = require('../lib/utils/logger')
 const Campaign = require('../lib/campaign')
 
-function checkCampaignStatus(campaign) {
+function checkCampaignStatus (campaign) {
   if (R.isNil(campaign) || !campaign.isActive) {
     return 'There are no current campaign! please create one!'
   }
@@ -36,7 +35,6 @@ module.exports = {
 
     if (R.isNil(nominee)) {
       return msg.channel.send('This person did not receive any nomination so they are not eligible for voting')
-
     }
 
     nominee.voters.push(msg.author.username)
